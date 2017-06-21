@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-/**
- * Created by yan.paykov on 12.06.2017.
- */
 public class MainUF {
     private int[] parent;  // parent[i] = parent of i
     private byte[] rank;   // rank[i] = rank of subtree rooted at i (never more than 31)

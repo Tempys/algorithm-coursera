@@ -67,7 +67,7 @@ public class PercolationVisualizer {
 
     public static void main(String[] args) {
      //   System.out.println(args[0]);
-       In in = new In("C:\\projects\\algorithm-coursera\\src\\ua\\dubovslyi\\week1\\percolation\\input5.txt");      // input file
+       In in = new In("C:\\projects\\algorithm-coursera\\files\\input10.txt");      // input file
         //In in = new In("");
         int n = in.readInt();         // n-by-n ua.dubovslyi.week1.percolation system
 

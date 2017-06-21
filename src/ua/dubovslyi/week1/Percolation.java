@@ -1,99 +1,87 @@
 package ua.dubovslyi.week1;
 
-/**
- * Created by yan.paykov on 08.06.2017.
- */
+
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
 
-    private int[][] parent;
+    private boolean[][] opened;
+    private int top = 0;
+    private int bottom;
+    private int size;
+    private WeightedQuickUnionUF qf;
     private int count;
-    private int n;
 
-    public Percolation(int n) {
-      this.n = n;
-      this.parent = new int[n+1][n+1];
+    /**
+     * Creates N-by-N grid, with all sites blocked.
+     */
+    public Percolation(int N) {
+        size = N;
+        bottom = size * size + 1;
+        qf = new WeightedQuickUnionUF(size * size + 2);
+        opened = new boolean[size][size];
+    }
 
-        for (int i =1;i<=n;i++){
-            for (int y =1;y<=n;y++){
-                parent[i][y] =-1;
-            }
+    /**
+     * Opens site (row i, column j) if it is not already.
+     */
+    public void open(int i, int j) {
+        opened[i - 1][j - 1] = true;
+        if (i == 1) {
+            qf.union(getQFIndex(i, j), top);
         }
-    } // create n-by-n grid, with all sites blocked
+        if (i == size) {
+            qf.union(getQFIndex(i, j), bottom);
+        }
 
-    public   void open(int row, int col)  {
-        parent[row][col]=0;
+        if (j > 1 && isOpen(i, j - 1)) {
+            qf.union(getQFIndex(i, j), getQFIndex(i, j - 1));
+        }
+        if (j < size && isOpen(i, j + 1)) {
+            qf.union(getQFIndex(i, j), getQFIndex(i, j + 1));
+        }
+        if (i > 1 && isOpen(i - 1, j)) {
+            qf.union(getQFIndex(i, j), getQFIndex(i - 1, j));
+        }
+        if (i < size && isOpen(i + 1, j)) {
+            qf.union(getQFIndex(i, j), getQFIndex(i + 1, j));
+        }
+
         count++;
-    }  // open site (row, col) if it is not open already
-
-    public void union(int row, int col){
-
     }
 
-    public boolean isOpen(int row, int col) {
-        return  parent[row][col] == 0;
+    /**
+     * Is site (row i, column j) open?
+     */
+    public boolean isOpen(int i, int j) {
+        return opened[i - 1][j - 1];
     }
 
-    public boolean isFull(int row, int col) {
-
-        if(row ==1 && parent[row][col] == 0){
-            parent[row][col] = 1;
-            return true;
-        }
-
-        if(parent[row][col] == 0){
-
-            if(col != n && parent[row][col+1] == 1 ){
-                parent[row][col] = 1;
-            }
-
-            if(col != 1 && parent[row][col-1] == 1 ){
-                parent[row][col] = 1;
-            }
-
-            if(row != 1 && parent[row-1][col] == 1 ){
-                parent[row][col] = 1;
-            }
-
-            if(row != n && parent[row+1][col] == 1 ){
-                parent[row][col] = 1;
-            }
-
-        }
-
-        return parent[row][col] == 1;
-
-    }  // is site (row, col) full?
-
-    public     int numberOfOpenSites()  {
+    public     int numberOfOpenSites(){
         return count;
-    }     // number of open sites
+    }
 
-    public boolean percolates()  {
-
-        boolean firstRow = false;
-        boolean lastRow = false;
-        for (int column = 1; column<=n;column++){
-            if(parent[1][column] == 1){
-                firstRow = true;
-                break;
-            }
+    /**
+     * Is site (row i, column j) full?
+     */
+    public boolean isFull(int i, int j) {
+        if (0 < i && i <= size && 0 < j && j <= size) {
+            return qf.connected(top, getQFIndex(i , j));
+        } else {
+            throw new IndexOutOfBoundsException();
         }
+    }
 
-        for (int column = 1; column<=n;column++){
-            if(parent[n][column] == 1){
-                lastRow = true;
-                break;
-            }
-        }
+    /**
+     * Does the system percolate?
+     */
+    public boolean percolates() {
+        return qf.connected(top, bottom);
+    }
 
-        return firstRow && lastRow;
-
-    }            // does the system percolate?
-
-    public static void main(String[] args){
-      Percolation percolation = new Percolation(1);
-    }   // test client (optional)private int n;
-
+    private int getQFIndex(int i, int j) {
+        return size * (i - 1) + j;
+    }
 
 
 }
