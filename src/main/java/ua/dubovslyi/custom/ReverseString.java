@@ -7,18 +7,19 @@ public class ReverseString {
     }
 
 
-    private String reverse1(String word){
+    public String reverse1(String word){
 
       char [] chars = word.toCharArray();
 
       char [] reverse = new char [chars.length];
 
       int j =0;
-      for(int i =chars.length; i>= 0;i--){
+
+      for(int i =chars.length-1; i>= 0;i--){
 
           reverse[j] = chars[i];
           j++;
       }
-        return reverse.toString();
+        return new String(reverse);
     }
 }
