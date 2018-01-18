@@ -11,8 +11,8 @@ public class ReverseStringTest {
 
        ReverseString reverseString = new ReverseString();
 
-        Assert.assertEquals("tset",reverseString.reverse1("test"));
-        Assert.assertEquals("jhgfdsa",reverseString.reverse1("asdfghj"));
+        Assert.assertEquals("tset",reverseString.myReverseAlgorithms("test"));
+        Assert.assertEquals("jhgfdsa",reverseString.myReverseAlgorithms("asdfghj"));
     }
 }
 
